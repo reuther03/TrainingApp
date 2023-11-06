@@ -3,7 +3,6 @@ using Application.Database;
 using Application.Dto.TrainingPlan;
 using Domain.Abstractions.Exceptions;
 using Domain.TrainingPlans;
-using Domain.Trainings;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services;

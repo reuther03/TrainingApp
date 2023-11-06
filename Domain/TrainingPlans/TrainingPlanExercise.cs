@@ -26,8 +26,12 @@ public class TrainingPlanExercise : Entity
         Name = name;
         MuscleGroup = muscleGroup;
         Description = description;
-        ImgUrl = imgUrl;
-        TutorialUrl = tutorialUrl;
+
+        if (Uri.IsWellFormedUriString(imgUrl, UriKind.Absolute))
+            ImgUrl = imgUrl;
+
+        if (Uri.IsWellFormedUriString(tutorialUrl, UriKind.Absolute))
+            TutorialUrl = tutorialUrl;
     }
 
     public static TrainingPlanExercise Create(
@@ -38,7 +42,33 @@ public class TrainingPlanExercise : Entity
         string? tutorialUrl = null
     )
     {
-        var trainingPlanExercise = new TrainingPlanExercise(Guid.NewGuid(), name, muscleGroup, description, imgUrl, tutorialUrl);
-        return trainingPlanExercise;
+        return new TrainingPlanExercise(Guid.NewGuid(), name, muscleGroup, description, imgUrl, tutorialUrl);
+    }
+
+    public void Update(string name, MuscleGroup muscleGroup, string? description, string? imgUrl, string? tutorialUrl)
+    {
+        Name = name;
+        MuscleGroup = muscleGroup;
+        Description = description;
+
+        if (Uri.IsWellFormedUriString(imgUrl, UriKind.Absolute))
+            ImgUrl = imgUrl;
+
+        if (Uri.IsWellFormedUriString(tutorialUrl, UriKind.Absolute))
+            TutorialUrl = tutorialUrl;
     }
 }
+
+// TODO: Url value object example
+// public class ImageUrl
+// {
+//     public string Value { get; }
+//
+//     public ImageUrl(string value)
+//     {
+//         if (!Uri.IsWellFormedUriString(value, UriKind.Absolute))
+//             throw new ArgumentException("Invalid image url");
+//
+//         Value = value;
+//     }
+// }
