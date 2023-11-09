@@ -22,6 +22,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(e => e.Password)
             .IsRequired();
 
-        
+        builder.Property(e => e.Role)
+            .IsRequired();
     }
 }

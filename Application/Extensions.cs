@@ -3,6 +3,9 @@ using Application.Abstractions.Services;
 using Application.Abstractions.Settings;
 using Application.Features.TrainingPlanExercises;
 using Application.Features.TrainingPlans;
+using Application.Features.Users;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,12 +42,15 @@ public static class Extensions
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authSettings.JwtKey))
             };
         });
-
         services.AddAuthorization();
+
+        services.AddValidatorsFromAssembly(typeof(Extensions).Assembly);
+        services.AddFluentValidationAutoValidation();
 
         // TODO: tutaj dodawac servisy
         services.AddScoped<ITrainingPlanService, TrainingPlanService>();
         services.AddScoped<ITrainingPlanExerciseService, TrainingPlanExerciseService>();
+        services.AddScoped<IUserService, UserService>();
         return services;
     }
 }

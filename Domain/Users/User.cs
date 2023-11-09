@@ -21,6 +21,7 @@ public sealed class User : Entity
         Username = username;
         Email = email;
         BirthDate = birthDate;
+        Role = role;
 
         SetPassword(rawPassword);
     }
@@ -55,6 +56,6 @@ public sealed class User : Entity
 
     public bool VerifyPassword(string rawPassword)
     {
-        return PasswordHasher.Verify(Password, rawPassword);
+        return PasswordHasher.Verify(rawPassword, Password);
     }
 }

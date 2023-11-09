@@ -16,7 +16,7 @@ var connectionString = configuration.GetConnectionString("DefaultConnection");
 services.AddDbContext<TrainingDbContext>(options => options.UseSqlite(connectionString));
 
 // Rejstracja servisow
-services.AddApplication();
+services.AddApplication(configuration);
 
 var app = builder.Build();
 
@@ -30,7 +30,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseAuthentication();
 app.UseHttpsRedirection();
+app.UseAuthorization();
 app.MapControllers();
 
 app.Run();

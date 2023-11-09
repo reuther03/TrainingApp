@@ -7,7 +7,8 @@ public interface IUserService
 {
     // string GetCurrentUser();
 
-    Guid CreateUser(RegisterUserDto dto);
+    Guid RegisterUser(RegisterUserDto dto);
+    string LoginUser(LoginUserDto dto);
 
     // string LoginUser(LoginUserDto dto);
     // TODO:

@@ -22,7 +22,7 @@ internal sealed class UserService : IUserService
         _authSettings = authSettings;
     }
 
-    public Guid CreateUser(RegisterUserDto dto)
+    public Guid RegisterUser(RegisterUserDto dto)
     {
         var user = User.CreateUser(dto.Username, dto.Email, dto.BirthDate, dto.Password);
 
@@ -32,13 +32,19 @@ internal sealed class UserService : IUserService
         return user.Id;
     }
 
+    public string LoginUser(LoginUserDto dto)
+    {
+        var user = _context.Users.FirstOrDefault(u => u.Email == dto.Email);
+        if (user is null) throw new BadRequestException("Invalid email or password");
+
+        var isValid = user.VerifyPassword(dto.Password);
+        if (!isValid) throw new BadRequestException("Invalid username or password");
+
+        return GenerateToken(user);
+    }
+
     private string GenerateToken(User user)
     {
-        if (user is null)
-        {
-            throw new ApplicationException("Invalid username or password");
-        }
-
         var claims = new List<Claim>
         {
             new(ClaimTypes.NameIdentifier, user.Id.ToString()),
