@@ -1,4 +1,6 @@
-﻿namespace Application.Dto.TrainingPlan;
+﻿using Application.Features.TrainingPlanExercises.Dto;
+
+namespace Application.Features.TrainingPlans.Dto;
 
 public class TrainingPlanDetailsDto
 {

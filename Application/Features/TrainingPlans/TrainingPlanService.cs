@@ -1,11 +1,12 @@
 ﻿using Application.Abstractions.Services;
 using Application.Database;
-using Application.Dto.TrainingPlan;
+using Application.Features.TrainingPlanExercises.Dto;
+using Application.Features.TrainingPlans.Dto;
 using Domain.Abstractions.Exceptions;
 using Domain.TrainingPlans;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Services;
+namespace Application.Features.TrainingPlans;
 
 class TrainingPlanService : ITrainingPlanService
 {

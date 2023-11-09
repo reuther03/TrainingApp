@@ -1,6 +1,6 @@
 ﻿using Domain.TrainingPlans;
 
-namespace Application.Dto.TrainingPlan;
+namespace Application.Features.TrainingPlanExercises.Dto;
 
 public class TrainingPlanExerciseDetailsDto
 {

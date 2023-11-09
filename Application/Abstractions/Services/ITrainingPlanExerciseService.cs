@@ -1,4 +1,4 @@
-﻿using Application.Dto.TrainingPlan;
+﻿using Application.Features.TrainingPlanExercises.Dto;
 
 namespace Application.Abstractions.Services;
 

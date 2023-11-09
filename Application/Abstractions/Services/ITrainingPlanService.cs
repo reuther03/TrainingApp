@@ -1,5 +1,5 @@
-﻿using Application.Dto.TrainingPlan;
-using Domain.TrainingPlans;
+﻿using Application.Features.TrainingPlanExercises.Dto;
+using Application.Features.TrainingPlans.Dto;
 
 namespace Application.Abstractions.Services;
 

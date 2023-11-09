@@ -1,7 +1,6 @@
-﻿using System.Net;
-using Api.Controllers.Base;
+﻿using Api.Controllers.Base;
 using Application.Abstractions.Services;
-using Application.Dto.TrainingPlan;
+using Application.Features.TrainingPlanExercises.Dto;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
