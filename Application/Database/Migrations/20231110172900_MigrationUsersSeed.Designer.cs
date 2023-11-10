@@ -3,6 +3,7 @@ using System;
 using Application.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Application.Database.Migrations
 {
     [DbContext(typeof(TrainingDbContext))]
-    partial class TrainingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231110172900_MigrationUsersSeed")]
+    partial class MigrationUsersSeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.13");
@@ -144,19 +147,19 @@ namespace Application.Database.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("5fde871c-15f5-419f-a132-c766b37b71a7"),
-                            BirthDate = new DateTime(2003, 11, 10, 18, 31, 58, 566, DateTimeKind.Local).AddTicks(4220),
-                            Email = "admin@email.com",
-                            Password = "Jc9QGSy6JiDYIByaLoj4OApubS+KObRK1t8yJJiU61Y=:CQCBWd7W0gYT89kJXXrg7g==:10000:SHA256",
+                            Id = new Guid("ed78a8c9-201f-491b-8afe-a080fc1cb6df"),
+                            BirthDate = new DateTime(2003, 11, 10, 18, 29, 0, 513, DateTimeKind.Local).AddTicks(2431),
+                            Email = "admin",
+                            Password = "EdaZ/7r06IeBJxTfea14VxKVrZZz2zm0SWz8vfzhUpI=:uIOLRb+P9iF2AuznnF2Iuw==:10000:SHA256",
                             Role = 2,
                             Username = "admin"
                         },
                         new
                         {
-                            Id = new Guid("aa923149-86d9-4b2d-b831-060fecf69e47"),
-                            BirthDate = new DateTime(2005, 11, 10, 18, 31, 58, 573, DateTimeKind.Local).AddTicks(9978),
-                            Email = "user@email.com",
-                            Password = "t4FYq2L2zxFBWwYoCA/QoC0HlIHzm56rDUIVWwvuCI0=:zcGCVgFrn79B44T4mP3wng==:10000:SHA256",
+                            Id = new Guid("18821ff2-7224-4316-ba1f-3883f9089287"),
+                            BirthDate = new DateTime(2005, 11, 10, 18, 29, 0, 522, DateTimeKind.Local).AddTicks(7089),
+                            Email = "user",
+                            Password = "ik/1g2rQCe3FZqmPv7nabsM563LpBfBKwsxQgLr8z2I=:iurqxkfltF1pHzjmblSwbQ==:10000:SHA256",
                             Role = 0,
                             Username = "user"
                         });

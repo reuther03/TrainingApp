@@ -1,6 +1,9 @@
 using Application;
+using Application.Abstractions.Auth;
 using Application.Database;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +13,28 @@ var services = builder.Services;
 services.AddControllers();
 
 services.AddEndpointsApiExplorer();
-services.AddSwaggerGen();
+services.AddSwaggerGen(swagger =>
+{
+    var securityScheme = new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.Http,
+        Description = "Raw JWT Bearer token",
+        Name = "JWT Authentication",
+        In = ParameterLocation.Header,
+        Scheme = JwtBearerDefaults.AuthenticationScheme,
+        BearerFormat = "JWT",
+        Reference = new OpenApiReference
+        {
+            Id = JwtBearerDefaults.AuthenticationScheme,
+            Type = ReferenceType.SecurityScheme
+        }
+    };
+    swagger.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, securityScheme);
+    swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        { securityScheme, new List<string>() }
+    });
+});
 
 var connectionString = configuration.GetConnectionString("DefaultConnection");
 services.AddDbContext<TrainingDbContext>(options => options.UseSqlite(connectionString));
@@ -33,6 +57,7 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseHttpsRedirection();
 app.UseAuthorization();
+app.UseMiddleware<AuthMiddleware>();
 app.MapControllers();
 
 app.Run();

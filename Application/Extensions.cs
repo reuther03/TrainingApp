@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Application.Abstractions.Auth;
 using Application.Abstractions.Services;
 using Application.Abstractions.Settings;
 using Application.Features.TrainingPlanExercises;
@@ -43,6 +44,11 @@ public static class Extensions
             };
         });
         services.AddAuthorization();
+
+        // middleware
+        services.AddScoped<AuthMiddleware>();
+        services.AddScoped<IUserContext, UserContext>();
+
 
         services.AddValidatorsFromAssembly(typeof(Extensions).Assembly);
         services.AddFluentValidationAutoValidation();

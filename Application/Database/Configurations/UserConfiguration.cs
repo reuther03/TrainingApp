@@ -24,5 +24,11 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(e => e.Role)
             .IsRequired();
+
+        builder.HasData(new List<User>
+        {
+            User.CreateAdmin("admin", "admin@email.com", DateTime.Now.AddYears(-20), "admin"),
+            User.CreateUser("user", "user@email.com", DateTime.Now.AddYears(-18), "user")
+        });
     }
 }

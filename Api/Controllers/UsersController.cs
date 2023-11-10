@@ -1,6 +1,7 @@
 ﻿using Api.Controllers.Base;
 using Application.Abstractions.Services;
 using Application.Features.Users.Dto;
+using Domain.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,6 +14,22 @@ public class UsersController : BaseController
     public UsersController(IUserService userService)
     {
         _userService = userService;
+    }
+
+    [HttpGet("current")]
+    [Authorize]
+    public ActionResult<string> GetCurrentUser()
+    {
+        var result = _userService.GetCurrentUser();
+        return Ok(result);
+    }
+
+    [HttpGet]
+    [AuthorizeRoles(Role.Admin)]
+    public ActionResult<IEnumerable<UserDto>> GetAllUsers()
+    {
+        var result = _userService.GetAllUsers();
+        return Ok(result);
     }
 
     [HttpPost("register")]
@@ -29,5 +46,21 @@ public class UsersController : BaseController
     {
         var result = _userService.LoginUser(dto);
         return Ok(result);
+    }
+
+    [HttpDelete("{id:guid}")]
+    [AuthorizeRoles(Role.Admin)]
+    public ActionResult DeleteUser([FromRoute] Guid id)
+    {
+        _userService.DeleteUser(id);
+        return NotFound();
+    }
+
+    [HttpDelete("delete-account")]
+    [Authorize]
+    public ActionResult DeleteAccount()
+    {
+        _userService.DeleteAccount();
+        return Ok();
     }
 }

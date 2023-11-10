@@ -4,9 +4,9 @@ using FluentValidation;
 
 namespace Application.Features.Users.Validators;
 
-public class LoginUserValidator : AbstractValidator<LoginUserDto>
+public class LoginUserDtoValidator : AbstractValidator<LoginUserDto>
 {
-    public LoginUserValidator(TrainingDbContext dbContext)
+    public LoginUserDtoValidator(TrainingDbContext dbContext)
     {
         RuleFor(x => x.Email)
             .NotEmpty()
