@@ -7,7 +7,6 @@ dotnet ef migrations add Init -s ..\Api -c TrainingDbContext -o Database/Migrati
 ```
 ToDo:
 - User
-  Add GetCurrentUser ()
   Add UpdateUser ()
   Add change password
   Add Edit User

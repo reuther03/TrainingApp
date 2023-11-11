@@ -48,6 +48,14 @@ public class UsersController : BaseController
         return Ok(result);
     }
 
+    [HttpPatch("update")]
+    [Authorize]
+    public ActionResult UpdateUser([FromBody] UserDto dto)
+    {
+        _userService.UpdateUser(dto);
+        return Ok();
+    }
+
     [HttpDelete("{id:guid}")]
     [AuthorizeRoles(Role.Admin)]
     public ActionResult DeleteUser([FromRoute] Guid id)

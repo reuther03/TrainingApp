@@ -9,6 +9,7 @@ public interface IUserService
     IEnumerable<UserDto> GetAllUsers();
     Guid RegisterUser(RegisterUserDto dto);
     string LoginUser(LoginUserDto dto);
+    Guid UpdateUser(UserDto dto);
     void DeleteUser(Guid id);
     void DeleteAccount();
 }

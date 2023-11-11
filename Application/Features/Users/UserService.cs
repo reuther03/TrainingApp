@@ -67,6 +67,17 @@ internal sealed class UserService : IUserService
         return GenerateToken(user);
     }
 
+    public Guid UpdateUser(UserDto dto)
+    {
+        var user = _context.Users.FirstOrDefault(u => u.Id == _userContext.UserId);
+        if (user is null) throw new ApplicationException("User not found");
+
+        user.Update(dto.Username, dto.BirthDate ,dto.Email);
+        _context.SaveChanges();
+
+        return user.Id;
+    }
+
     public void DeleteUser(Guid id)
     {
         var user = _context.Users.FirstOrDefault(u => u.Id == id);
