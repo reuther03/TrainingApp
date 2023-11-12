@@ -1,4 +1,5 @@
-﻿using Application.Abstractions.Services;
+﻿using Application.Abstractions.Auth;
+using Application.Abstractions.Services;
 using Application.Database;
 using Application.Features.TrainingPlanExercises.Dto;
 using Domain.Abstractions.Exceptions;
@@ -10,10 +11,12 @@ namespace Application.Features.TrainingPlanExercises;
 public class TrainingPlanExerciseService : ITrainingPlanExerciseService
 {
     private readonly TrainingDbContext _context;
+    private readonly IUserContext _userContext;
 
-    public TrainingPlanExerciseService(TrainingDbContext context)
+    public TrainingPlanExerciseService(TrainingDbContext context, IUserContext userContext)
     {
         _context = context;
+        _userContext = userContext;
     }
 
     public IEnumerable<TrainingPlanExerciseDto> GetAllExercises()
@@ -90,7 +93,6 @@ public class TrainingPlanExerciseService : ITrainingPlanExerciseService
             dto.ImgUrl,
             dto.TutorialUrl
         );
-
         _context.SaveChanges();
 
         return exercise.Id;

@@ -78,6 +78,20 @@ internal sealed class UserService : IUserService
         return user.Id;
     }
 
+    public Guid ChangePassword(UserPasswordDto dto)
+    {
+        var user = _context.Users.FirstOrDefault(u => u.Id == _userContext.UserId);
+        if (user is null) throw new ApplicationException("User not found");
+
+        var isValid = user.VerifyPassword(dto.CurrentPassword);
+        if (!isValid) throw new ApplicationException("Invalid password");
+
+        user.SetPassword(dto.Password);
+        _context.SaveChanges();
+
+        return user.Id;
+    }
+
     public void DeleteUser(Guid id)
     {
         var user = _context.Users.FirstOrDefault(u => u.Id == id);

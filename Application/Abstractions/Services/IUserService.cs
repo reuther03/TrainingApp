@@ -10,6 +10,7 @@ public interface IUserService
     Guid RegisterUser(RegisterUserDto dto);
     string LoginUser(LoginUserDto dto);
     Guid UpdateUser(UserDto dto);
+    Guid ChangePassword(UserPasswordDto dto);
     void DeleteUser(Guid id);
     void DeleteAccount();
 }

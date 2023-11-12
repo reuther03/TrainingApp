@@ -10,6 +10,16 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     {
         builder.HasKey(e => e.Id);
 
+        builder.Property(e => e.CreatedBy)
+            .IsRequired(false);
+        builder.Property(e => e.CreatedAt)
+            .IsRequired();
+
+        builder.Property(e => e.UpdatedAt)
+            .IsRequired(false);
+        builder.Property(e => e.UpdatedBy)
+            .IsRequired(false);
+
         builder.Property(e => e.Username)
             .IsRequired();
 

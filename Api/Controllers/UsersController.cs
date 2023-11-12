@@ -48,11 +48,19 @@ public class UsersController : BaseController
         return Ok(result);
     }
 
-    [HttpPatch("update")]
+    [HttpPatch("update-user")]
     [Authorize]
     public ActionResult UpdateUser([FromBody] UserDto dto)
     {
         _userService.UpdateUser(dto);
+        return Ok();
+    }
+
+    [HttpPatch("update-password")]
+    [Authorize]
+    public ActionResult UpdatePassword([FromBody] UserPasswordDto dto)
+    {
+        _userService.ChangePassword(dto);
         return Ok();
     }
 

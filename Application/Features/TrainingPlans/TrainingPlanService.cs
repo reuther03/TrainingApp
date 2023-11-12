@@ -1,4 +1,5 @@
-﻿using Application.Abstractions.Services;
+﻿using Application.Abstractions.Auth;
+using Application.Abstractions.Services;
 using Application.Database;
 using Application.Features.TrainingPlanExercises.Dto;
 using Application.Features.TrainingPlans.Dto;
@@ -11,10 +12,12 @@ namespace Application.Features.TrainingPlans;
 class TrainingPlanService : ITrainingPlanService
 {
     private readonly TrainingDbContext _context;
+    private readonly IUserContext _userContext;
 
-    public TrainingPlanService(TrainingDbContext context)
+    public TrainingPlanService(TrainingDbContext context, IUserContext userContext)
     {
         _context = context;
+        _userContext = userContext;
     }
 
     public TrainingPlanDetailsDto GetTrainingPlanDetails(Guid id)
@@ -83,14 +86,6 @@ class TrainingPlanService : ITrainingPlanService
         foreach (var exerciseDto in dto.Exercises)
         {
             var exercise = exerciseDto.ToEntity();
-            // var exercise = TrainingPlanExercise.Create(
-            //     exerciseDto.Name,
-            //     exerciseDto.MuscleGroup,
-            //     exerciseDto.Description,
-            //     exerciseDto.ImgUrl,
-            //     exerciseDto.TutorialUrl
-            // );
-
             exercises.Add(exercise);
         }
 
@@ -125,6 +120,9 @@ class TrainingPlanService : ITrainingPlanService
         if (trainingPlan is null)
             throw new EntityNotFoundException(typeof(TrainingPlan), id);
 
+        if (trainingPlan.CreatedBy != _userContext.UserId)
+            throw new BadRequestException("You are not allowed to add exercises to this training plan");
+
         var trainingPlanExercise = TrainingPlanExercise.Create(
             dto.Name,
             dto.MuscleGroup,
@@ -132,7 +130,6 @@ class TrainingPlanService : ITrainingPlanService
             dto.ImgUrl,
             dto.TutorialUrl
         );
-
         trainingPlan.AddExercises(trainingPlanExercise);
         _context.TrainingPlanExercises.Add(trainingPlanExercise);
         _context.SaveChanges();
@@ -154,6 +151,9 @@ class TrainingPlanService : ITrainingPlanService
         if (trainingPlanExercise is null)
             throw new EntityNotFoundException(typeof(TrainingPlanExercise), id);
 
+        if (trainingPlan.CreatedBy != _userContext.UserId)
+            throw new BadRequestException("You are not allowed to delete this training plan");
+
         trainingPlan.AddExercises(trainingPlanExercise);
         _context.SaveChanges();
     }
@@ -165,6 +165,9 @@ class TrainingPlanService : ITrainingPlanService
 
         if (trainingPlan is null)
             throw new EntityNotFoundException(typeof(TrainingPlan), id);
+
+        if (trainingPlan.CreatedBy != _userContext.UserId)
+            throw new BadRequestException("You are not allowed to delete this training plan");
 
         _context.Remove(trainingPlan);
         _context.SaveChanges();
@@ -185,6 +188,9 @@ class TrainingPlanService : ITrainingPlanService
 
         if (exercise is null)
             throw new EntityNotFoundException(typeof(TrainingPlanExercise), exerciseId);
+
+        if (exercise.CreatedBy != _userContext.UserId)
+            throw new BadRequestException("You are not allowed to delete this exercise");
 
         trainingPlan.RemoveExercise(exercise);
         _context.SaveChanges();

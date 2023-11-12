@@ -2,6 +2,7 @@
 using Application.Abstractions.Services;
 using Application.Features.TrainingPlanExercises.Dto;
 using Application.Features.TrainingPlans.Dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
@@ -16,6 +17,7 @@ public class TrainingPlansController : BaseController
     }
 
     [HttpGet]
+    [Authorize]
     public IActionResult GetAll()
     {
         var result = _trainingPlanService.GetAllPlans();
@@ -23,6 +25,7 @@ public class TrainingPlansController : BaseController
     }
 
     [HttpGet("{id:guid}")]
+    [Authorize]
     public IActionResult GetDetails([FromRoute] Guid id)
     {
         var result = _trainingPlanService.GetTrainingPlanDetails(id);
@@ -30,6 +33,7 @@ public class TrainingPlansController : BaseController
     }
 
     [HttpPost]
+    [Authorize]
     public IActionResult Create([FromBody] CreateTrainingPlanDto dto)
     {
         var result = _trainingPlanService.CreateTrainingPlan(dto);
@@ -37,6 +41,7 @@ public class TrainingPlansController : BaseController
     }
 
     [HttpDelete("{id:guid}")]
+    [Authorize]
     public IActionResult DeleteTrainingPlan([FromRoute] Guid id)
     {
         _trainingPlanService.DeleteTrainingPlan(id);
@@ -44,6 +49,7 @@ public class TrainingPlansController : BaseController
     }
 
     [HttpPut("{id:guid}/add-new-exercise")]
+    [Authorize]
     public IActionResult AddNewExercise([FromRoute] Guid id, CreateTrainingPlanExerciseDto dto)
     {
         _trainingPlanService.AddNewTrainingPlanExercise(id, dto);
@@ -51,6 +57,7 @@ public class TrainingPlansController : BaseController
     }
 
     [HttpPut("{id:guid}/add-exercise/{exerciseId:guid}")]
+    [Authorize]
     public IActionResult AddExistingExercise([FromRoute] Guid id, [FromRoute] Guid exerciseId)
     {
         _trainingPlanService.AddExistingTrainingPlanExercise(id, exerciseId);

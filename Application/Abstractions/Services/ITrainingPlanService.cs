@@ -6,8 +6,8 @@ namespace Application.Abstractions.Services;
 public interface ITrainingPlanService
 {
     TrainingPlanDetailsDto GetTrainingPlanDetails(Guid id);
-    // TrainingPlanDetailsDto -> { Guid Id, string Name, List<TrainingPlanExerciseDetailsDto> Exercises }
 
+    // TrainingPlanDetailsDto -> { Guid Id, string Name, List<TrainingPlanExerciseDetailsDto> Exercises }
     IEnumerable<TrainingPlanDto> GetAllPlans();
     Guid CreateTrainingPlan(CreateTrainingPlanDto dto);
     void AddNewTrainingPlanExercise(Guid id, CreateTrainingPlanExerciseDto dto);
