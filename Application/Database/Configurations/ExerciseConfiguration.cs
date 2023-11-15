@@ -14,10 +14,11 @@ public class ExerciseConfiguration : IEntityTypeConfiguration<Exercise>
         builder.Property(x => x.Reps);
         builder.Property(x => x.Note);
 
-        builder
-            .HasOne(x => x.TrainingPlanExercise)
-            .WithMany()
-            .HasForeignKey(x => x.TrainingPlanExerciseId)
-            .OnDelete(DeleteBehavior.NoAction);
+        // builder.OwnsMany(x => x.Sets2, setBuilder =>
+        // {
+        //     setBuilder.HasKey("Id");
+        //     setBuilder.Property(x => x.Kg);
+        //     setBuilder.Property(x => x.Reps);
+        // });
     }
 }

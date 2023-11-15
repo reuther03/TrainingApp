@@ -1,4 +1,5 @@
 ﻿using Domain.Abstractions;
+using Domain.Trainings;
 
 namespace Domain.Users;
 
@@ -9,6 +10,7 @@ public sealed class User : Entity
     public DateTime BirthDate { get; private set; }
     public string Password { get; private set; } = default!;
     public Role Role { get; private set; } = Role.User;
+    public ICollection<Training> Trainings { get; set; } = new List<Training>();
 
 
     private User()

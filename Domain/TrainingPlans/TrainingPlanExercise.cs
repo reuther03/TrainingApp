@@ -5,6 +5,7 @@ namespace Domain.TrainingPlans;
 public class TrainingPlanExercise : Entity
 {
     public string Name { get; private set; } = default!;
+    public bool IsGlobal { get; private set; }
     public MuscleGroup MuscleGroup { get; private set; } = default!;
     public string? Description { get; private set; }
     public string? ImgUrl { get; private set; }
@@ -17,6 +18,7 @@ public class TrainingPlanExercise : Entity
     private TrainingPlanExercise(
         Guid id,
         string name,
+        bool isGlobal,
         MuscleGroup muscleGroup,
         string? description,
         string? imgUrl,
@@ -24,6 +26,7 @@ public class TrainingPlanExercise : Entity
     ) : base(id)
     {
         Name = name;
+        IsGlobal = isGlobal;
         MuscleGroup = muscleGroup;
         Description = description;
 
@@ -36,13 +39,14 @@ public class TrainingPlanExercise : Entity
 
     public static TrainingPlanExercise Create(
         string name,
+        bool isGlobal,
         MuscleGroup muscleGroup,
         string? description = null,
         string? imgUrl = null,
         string? tutorialUrl = null
     )
     {
-        return new TrainingPlanExercise(Guid.NewGuid(), name, muscleGroup, description, imgUrl, tutorialUrl);
+        return new TrainingPlanExercise(Guid.NewGuid(), name, isGlobal, muscleGroup, description, imgUrl, tutorialUrl);
     }
 
     public void Update(string name, MuscleGroup muscleGroup, string? description, string? imgUrl, string? tutorialUrl)

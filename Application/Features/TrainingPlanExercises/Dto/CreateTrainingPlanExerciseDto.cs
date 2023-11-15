@@ -9,9 +9,4 @@ public class CreateTrainingPlanExerciseDto
     public string? Description { get; set; }
     public string? ImgUrl { get; set; }
     public string? TutorialUrl { get; set; }
-
-    public TrainingPlanExercise ToEntity()
-    {
-        return TrainingPlanExercise.Create(Name, MuscleGroup, Description, ImgUrl, TutorialUrl);
-    }
 }

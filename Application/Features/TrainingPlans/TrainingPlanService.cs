@@ -5,6 +5,7 @@ using Application.Features.TrainingPlanExercises.Dto;
 using Application.Features.TrainingPlans.Dto;
 using Domain.Abstractions.Exceptions;
 using Domain.TrainingPlans;
+using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.TrainingPlans;
@@ -18,6 +19,32 @@ class TrainingPlanService : ITrainingPlanService
     {
         _context = context;
         _userContext = userContext;
+    }
+    public IEnumerable<TrainingPlanDetailsDto> GetUserAndGlobalTrainingPlans()
+    {
+        var trainingPlans = _context.TrainingPlans
+            .Include(tp => tp.Exercises)
+            .Where(tp => tp.CreatedBy == _userContext.UserId || tp.IsGlobal)
+            .Select(tp => new TrainingPlanDetailsDto
+            {
+                Id = tp.Id,
+                Name = tp.Name,
+                Exercises = tp.Exercises
+                    .Select(e => new TrainingPlanExerciseDetailsDto
+                    {
+                        Id = e.Id,
+                        Name = e.Name,
+                        MuscleGroup = e.MuscleGroup,
+                        Description = e.Description,
+                        ImgUrl = e.ImgUrl,
+                        TutorialUrl = e.TutorialUrl
+                    })
+                    .ToList()
+            })
+            .AsSplitQuery()
+            .ToList();
+
+        return trainingPlans;
     }
 
     public TrainingPlanDetailsDto GetTrainingPlanDetails(Guid id)
@@ -48,21 +75,8 @@ class TrainingPlanService : ITrainingPlanService
             throw new EntityNotFoundException(typeof(TrainingPlan), id);
 
         return trainingPlan;
-        //     .Select(tp => new TrainingPlanDetailsDto
-        // {
-        //     Id = tp.Id,
-        //     Name = tp.Name,
-        //     Exercises = tp.Exercises.Select(e => new TrainingPlanExerciseDetailsDto
-        //     {
-        //         Id = default,
-        //         Name = null,
-        //         MuscleGroup = MuscleGroup.Chest,
-        //         Description = null,
-        //         ImgUrl = null,
-        //         TutorialUrl = null
-        //     }).ToList()
-        // })
     }
+
 
     public IEnumerable<TrainingPlanDto> GetAllPlans()
     {
@@ -82,10 +96,19 @@ class TrainingPlanService : ITrainingPlanService
 
     public Guid CreateTrainingPlan(CreateTrainingPlanDto dto)
     {
+        var isGlobal = _userContext.Role == Role.Admin;
         var exercises = new List<TrainingPlanExercise>();
         foreach (var exerciseDto in dto.Exercises)
         {
-            var exercise = exerciseDto.ToEntity();
+
+            var exercise = TrainingPlanExercise.Create(
+                exerciseDto.Name,
+                isGlobal,
+                exerciseDto.MuscleGroup,
+                exerciseDto.Description,
+                exerciseDto.ImgUrl,
+                exerciseDto.TutorialUrl
+            );
             exercises.Add(exercise);
         }
 
@@ -102,7 +125,7 @@ class TrainingPlanService : ITrainingPlanService
         }
 
         var allExercises = exercises.Concat(existingExercises);
-        var trainingPlan = TrainingPlan.Create(dto.Name, allExercises);
+        var trainingPlan = TrainingPlan.Create(dto.Name, isGlobal, allExercises);
 
         _context.TrainingPlans.Add(trainingPlan);
         _context.SaveChanges();
@@ -123,8 +146,10 @@ class TrainingPlanService : ITrainingPlanService
         if (trainingPlan.CreatedBy != _userContext.UserId)
             throw new BadRequestException("You are not allowed to add exercises to this training plan");
 
+        var isGlobal = _userContext.Role == Role.Admin;
         var trainingPlanExercise = TrainingPlanExercise.Create(
             dto.Name,
+            isGlobal,
             dto.MuscleGroup,
             dto.Description,
             dto.ImgUrl,

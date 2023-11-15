@@ -4,6 +4,7 @@ using Application.Abstractions.Services;
 using Application.Abstractions.Settings;
 using Application.Features.TrainingPlanExercises;
 using Application.Features.TrainingPlans;
+using Application.Features.Trainings;
 using Application.Features.Users;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -54,8 +55,9 @@ public static class Extensions
         services.AddFluentValidationAutoValidation();
 
         // TODO: tutaj dodawac servisy
-        services.AddScoped<ITrainingPlanService, TrainingPlanService>();
         services.AddScoped<ITrainingPlanExerciseService, TrainingPlanExerciseService>();
+        services.AddScoped<ITrainingPlanService, TrainingPlanService>();
+        services.AddScoped<ITrainingService, TrainingService>();
         services.AddScoped<IUserService, UserService>();
         return services;
     }

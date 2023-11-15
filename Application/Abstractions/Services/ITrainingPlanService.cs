@@ -6,7 +6,7 @@ namespace Application.Abstractions.Services;
 public interface ITrainingPlanService
 {
     TrainingPlanDetailsDto GetTrainingPlanDetails(Guid id);
-
+    IEnumerable<TrainingPlanDetailsDto> GetUserAndGlobalTrainingPlans();
     // TrainingPlanDetailsDto -> { Guid Id, string Name, List<TrainingPlanExerciseDetailsDto> Exercises }
     IEnumerable<TrainingPlanDto> GetAllPlans();
     Guid CreateTrainingPlan(CreateTrainingPlanDto dto);

@@ -35,6 +35,12 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(e => e.Role)
             .IsRequired();
 
+        builder
+            .HasMany(x => x.Trainings)
+            .WithOne()
+            .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         builder.HasData(new List<User>
         {
             User.CreateAdmin("admin", "admin@email.com", DateTime.Now.AddYears(-20), "admin"),

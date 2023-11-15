@@ -4,6 +4,7 @@ using Application.Database;
 using Application.Features.TrainingPlanExercises.Dto;
 using Domain.Abstractions.Exceptions;
 using Domain.TrainingPlans;
+using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.TrainingPlanExercises;
@@ -35,6 +36,25 @@ public class TrainingPlanExerciseService : ITrainingPlanExerciseService
         return exercise;
     }
 
+    public IEnumerable<TrainingPlanExerciseDetailsDto> GetUserAndGlobalTrainingPlanExercise()
+    {
+        var exercise = _context.TrainingPlanExercises
+            .AsSplitQuery()
+            .Where(e => e.CreatedBy == _userContext.UserId || e.IsGlobal)
+            .Select(e => new TrainingPlanExerciseDetailsDto
+            {
+                Id = e.Id,
+                Name = e.Name,
+                MuscleGroup = e.MuscleGroup,
+                Description = e.Description,
+                ImgUrl = e.ImgUrl,
+                TutorialUrl = e.TutorialUrl
+            })
+            .ToList();
+
+        return exercise;
+    }
+
     public TrainingPlanExerciseDetailsDto GetExerciseDetails(Guid id)
     {
         var exercise = _context.TrainingPlanExercises
@@ -58,7 +78,15 @@ public class TrainingPlanExerciseService : ITrainingPlanExerciseService
 
     public Guid CreateExercise(CreateTrainingPlanExerciseDto dto)
     {
-        var exercise = dto.ToEntity();
+        var isGlobal = _userContext.Role == Role.Admin;
+        var exercise = TrainingPlanExercise.Create(
+            dto.Name,
+            isGlobal,
+            dto.MuscleGroup,
+            dto.Description,
+            dto.ImgUrl,
+            dto.TutorialUrl
+        );
 
         _context.TrainingPlanExercises.Add(exercise);
         _context.SaveChanges();

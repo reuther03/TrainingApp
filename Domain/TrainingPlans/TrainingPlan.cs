@@ -5,20 +5,22 @@ namespace Domain.TrainingPlans;
 public class TrainingPlan : Entity
 {
     public string Name { get; private set; } = default!;
+    public bool IsGlobal { get; private set; }
     public ICollection<TrainingPlanExercise> Exercises { get; private set; } = new List<TrainingPlanExercise>();
 
     private TrainingPlan()
     {
     }
 
-    private TrainingPlan(Guid id, string name) : base(id)
+    private TrainingPlan(Guid id, string name, bool isGlobal) : base(id)
     {
         Name = name;
+        IsGlobal = isGlobal;
     }
 
-    public static TrainingPlan Create(string name, IEnumerable<TrainingPlanExercise> exercises)
+    public static TrainingPlan Create(string name, bool isGlobal, IEnumerable<TrainingPlanExercise> exercises)
     {
-        var trainingPlan = new TrainingPlan(Guid.NewGuid(), name);
+        var trainingPlan = new TrainingPlan(Guid.NewGuid(), name, isGlobal);
         trainingPlan.AddExercises(exercises.ToArray());
 
         return trainingPlan;

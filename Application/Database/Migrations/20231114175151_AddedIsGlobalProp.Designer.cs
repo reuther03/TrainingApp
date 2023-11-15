@@ -3,6 +3,7 @@ using System;
 using Application.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Application.Database.Migrations
 {
     [DbContext(typeof(TrainingDbContext))]
-    partial class TrainingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231114175151_AddedIsGlobalProp")]
+    partial class AddedIsGlobalProp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.13");
@@ -101,21 +104,8 @@ namespace Application.Database.Migrations
                     b.Property<Guid?>("CreatedBy")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ImgUrl")
-                        .HasColumnType("TEXT");
-
                     b.Property<double>("Kg")
                         .HasColumnType("REAL");
-
-                    b.Property<int>("MuscleGroup")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("Note")
                         .HasColumnType("TEXT");
@@ -129,7 +119,7 @@ namespace Application.Database.Migrations
                     b.Property<Guid>("TrainingId")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("TutorialUrl")
+                    b.Property<Guid>("TrainingPlanExerciseId")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -141,6 +131,8 @@ namespace Application.Database.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("TrainingId");
+
+                    b.HasIndex("TrainingPlanExerciseId");
 
                     b.ToTable("Exercises");
                 });
@@ -173,12 +165,7 @@ namespace Application.Database.Migrations
                     b.Property<Guid?>("UpdatedBy")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Trainings");
                 });
@@ -226,21 +213,21 @@ namespace Application.Database.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("90909428-90a3-472f-82c1-1cae2958ecc1"),
-                            BirthDate = new DateTime(2003, 11, 15, 20, 27, 48, 504, DateTimeKind.Local).AddTicks(2215),
+                            Id = new Guid("caa52184-8fd1-46d9-8b56-8b637c631a12"),
+                            BirthDate = new DateTime(2003, 11, 14, 18, 51, 50, 876, DateTimeKind.Local).AddTicks(7467),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "admin@email.com",
-                            Password = "J85YDXM03webh4ikxnHdwxz+5iT8jN9XaGhXhF4nFhw=:uAS5N7Najc7j6gcg5PsJjw==:10000:SHA256",
+                            Password = "zu0tBLmLZ5zQ2dIBQo6xvL4G3jomLIQCgz94faE0KLA=:uIz9WStnZSHgZKs2EsDQ5w==:10000:SHA256",
                             Role = 2,
                             Username = "admin"
                         },
                         new
                         {
-                            Id = new Guid("9b243303-a4ee-4e8d-b6fd-b1bcf9221c64"),
-                            BirthDate = new DateTime(2005, 11, 15, 20, 27, 48, 510, DateTimeKind.Local).AddTicks(8621),
+                            Id = new Guid("267a5558-c6e5-4485-b1c5-399af5e19763"),
+                            BirthDate = new DateTime(2005, 11, 14, 18, 51, 50, 883, DateTimeKind.Local).AddTicks(5150),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user@email.com",
-                            Password = "/BAz3OIVZDzQzzNoW1Yq2yy99zrLPMi+lFAdWZZhqkU=:AviXVWNvYxSmEvehhPus2Q==:10000:SHA256",
+                            Password = "POkmaWvxk7Jpk1giVgbhLxIdz+nKEug+PMIG5YLL5ds=:XvH/22DknetY0qK5RTA3xg==:10000:SHA256",
                             Role = 0,
                             Username = "user"
                         });
@@ -269,16 +256,15 @@ namespace Application.Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Training");
-                });
-
-            modelBuilder.Entity("Domain.Trainings.Training", b =>
-                {
-                    b.HasOne("Domain.Users.User", null)
-                        .WithMany("Trainings")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("Domain.TrainingPlans.TrainingPlanExercise", "TrainingPlanExercise")
+                        .WithMany()
+                        .HasForeignKey("TrainingPlanExerciseId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("Training");
+
+                    b.Navigation("TrainingPlanExercise");
                 });
 
             modelBuilder.Entity("TrainingPlanTrainingPlanExercise", b =>
@@ -299,11 +285,6 @@ namespace Application.Database.Migrations
             modelBuilder.Entity("Domain.Trainings.Training", b =>
                 {
                     b.Navigation("Exercises");
-                });
-
-            modelBuilder.Entity("Domain.Users.User", b =>
-                {
-                    b.Navigation("Trainings");
                 });
 #pragma warning restore 612, 618
         }

@@ -2,6 +2,7 @@
 using Application.Abstractions.Services;
 using Application.Features.TrainingPlanExercises.Dto;
 using Application.Features.TrainingPlans.Dto;
+using Domain.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,6 +30,15 @@ public class TrainingPlansController : BaseController
     public IActionResult GetDetails([FromRoute] Guid id)
     {
         var result = _trainingPlanService.GetTrainingPlanDetails(id);
+        return Ok(result);
+    }
+
+    [HttpGet("user-training-plans")]
+    [Authorize]
+    [AuthorizeRoles(Role.Admin)]
+    public IActionResult GetUsersTrainingPlans()
+    {
+        var result = _trainingPlanService.GetUserAndGlobalTrainingPlans();
         return Ok(result);
     }
 
