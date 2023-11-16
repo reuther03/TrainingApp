@@ -66,4 +66,20 @@ public class TrainingService : ITrainingService
         if (!result)
             throw new ApplicationException("Failed to set exercise details");
     }
+
+    public Guid CompleteTraining(Guid trainingId)
+    {
+        var training = _context.Trainings
+            .FirstOrDefault(t => t.Id == trainingId);
+
+        if (training is null)
+            throw new EntityNotFoundException(typeof(TrainingPlan), trainingId);
+
+        training.Complete();
+        var result = _context.SaveChanges() > 0;
+        if (!result)
+            throw new ApplicationException("Failed to complete training");
+
+        return trainingId;
+    }
 }

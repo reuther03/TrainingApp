@@ -1,6 +1,5 @@
 ﻿using Api.Controllers.Base;
 using Application.Abstractions.Services;
-using Application.Features.TrainingPlans.Dto;
 using Application.Features.Trainings.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,6 +29,14 @@ public class TrainingsController : BaseController
     {
         _trainingService.SetExerciseDetails(trainingId, exerciseId, dto);
         return Ok();
+    }
+
+    [HttpPost("{trainingId:guid}/complete")]
+    [Authorize]
+    public IActionResult Complete([FromRoute] Guid trainingId)
+    {
+        var result = _trainingService.CompleteTraining(trainingId);
+        return Ok(result);
     }
 
     // TODO: Endpoiny zwiazane z treningiem
